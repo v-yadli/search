@@ -1,0 +1,111 @@
+#!/usr/bin/python
+
+import sys
+import curses
+import os
+args = sys.argv
+MAX_ENTRY_COUNT = 100
+
+#for i in xrange(0, len(args)):
+#				print args[i]
+
+def usage():
+				print 'usage: search [command] file\r'
+				print '    - If command is not specified, the default program will be called.\r'
+				print '    - In the file list, press enter to select, UP/DOWN to navigate, q/ESC to quit.\r'
+
+def draw_page(results, top, line, h, w, count, screen):
+				screen.clear()
+				for i in xrange(0,h-1):
+								if i+top < count:
+												target_str = results[i+top][0:w-1]
+												color = curses.A_NORMAL
+												screen.addstr(i, 0, target_str, color)
+								else:
+												break
+
+def select(results):
+				count = len(results)
+				maxLen = 1
+				for entry in results:
+								if len(entry) > maxLen:
+												maxLen = len(entry)
+
+				screen = curses.initscr()
+				pad = curses.newpad(count, maxLen)
+				curses.noecho()
+				curses.curs_set(0)
+				screen.keypad(1)
+
+				for i in xrange(0, count-1):
+								pad.addstr(i,0, results[i])
+
+				h,w = screen.getmaxyx()
+				top = 0
+				line = 0
+
+				#draw_page(results, top, line, h, w, count, screen)
+				#screen.addstr(line, 0, results[line][0:w], curses.A_REVERSE)
+				#pad.addstr(line, 0, results[line][0:w], curses.A_REVERSE)
+				#pad.refresh(top,0,0,0,h-1, w-1)
+
+				#Needed to somehow 'activate' the screen. Otherwise won't update after the first pad.refresh
+				screen.redrawwin()
+				screen.refresh()
+
+				while True:
+								pad.addstr(line, 0, results[line][0:w], curses.A_REVERSE)
+								pad.refresh(top,0,0,0,h-1, w-1)
+								key = screen.getch()
+								pad.addstr(line, 0, results[line][0:w], curses.A_NORMAL)
+								pad.refresh(top,0,0,0,h-1, w-1)
+								if key == curses.KEY_UP:
+												line = line - 1
+								if key == curses.KEY_DOWN:
+												line = line + 1
+								if key == ord('\n') or key == curses.KEY_ENTER:
+												break
+								if key == 27 or key==ord('q'): #27 for ESC
+												screen.clear()
+												line = -1
+												break
+								if line < 0:
+												line = 0
+								if line < top:
+												top = line
+												#draw_page(results, top, line, h, w, count, screen)
+								if line >= count:
+												line = count - 1
+								if line - top >= h:
+												top = top+1
+												#draw_page(results, top, line, h, w, count, screen)
+								
+				curses.endwin()
+				curses.echo()
+				curses.curs_set(1)
+
+				return line
+
+def search(target, cmd):
+				ret = os.popen('mdfind '+target).readlines()
+
+				choice = select(ret)
+				if choice == -1:
+								return
+
+				if cmd == '':
+								cmd = 'open'
+				cmd_string = cmd+' "'+ret[choice].strip() + '"'
+				#print cmd_string
+				os.system(cmd_string)
+
+#print len(args)
+
+if len(args)==1:
+				usage()
+				sys.exit()
+else:
+				args.pop(0)
+				target = args.pop()
+				cmd = ' '.join(args)
+				search(target, cmd)
