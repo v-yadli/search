@@ -20,3 +20,8 @@ usage: search [command] file
 
 #Internal#
 Nothing hardcore. This is just a Python/curses wrapper around the built-in spotlight companion tool ``mdfind``. Thus, you could reach anything that spotlight does.
+
+#Installation#
+- Clone it.
+- make install.
+- Currently, bash and zsh are supported.
