@@ -43,6 +43,7 @@ def select(results):
 				h,w = screen.getmaxyx()
 				top = 0
 				line = 0
+				horizontal_offset = 0
 
 				#draw_page(results, top, line, h, w, count, screen)
 				#screen.addstr(line, 0, results[line][0:w], curses.A_REVERSE)
@@ -54,15 +55,27 @@ def select(results):
 				screen.refresh()
 
 				while True:
-								pad.addstr(line, 0, results[line][0:w], curses.A_REVERSE)
-								pad.refresh(top,0,0,0,h-1, w-1)
+								pad.addstr(line, 0, results[line], curses.A_REVERSE)
+								pad.refresh(top, horizontal_offset, 0,0,h-1, w-1)
 								key = screen.getch()
-								pad.addstr(line, 0, results[line][0:w], curses.A_NORMAL)
-								pad.refresh(top,0,0,0,h-1, w-1)
+								pad.addstr(line, 0, results[line], curses.A_NORMAL)
+								pad.refresh(top,horizontal_offset,0,0,h-1, w-1)
 								if key == curses.KEY_UP:
 												line = line - 1
 								if key == curses.KEY_DOWN:
 												line = line + 1
+								if key == curses.KEY_LEFT:
+												horizontal_offset = horizontal_offset - 1
+												if horizontal_offset < 0:
+																horizontal_offset = 0
+												#screen.redrawwin()
+												#screen.refresh()
+								if key == curses.KEY_RIGHT:
+												horizontal_offset = horizontal_offset + 1
+												if horizontal_offset >= maxLen:
+																horizontal_offset = maxLen - 1
+												#screen.redrawwin()
+												#screen.refresh()
 								if key == ord('\n') or key == curses.KEY_ENTER:
 												break
 								if key == 27 or key==ord('q'): #27 for ESC
