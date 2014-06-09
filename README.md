@@ -12,3 +12,11 @@ Command line search tool built for OS X.
 usage: search [command] file
 - If command is not specified, the default program will be called.
 - In the file list, press enter to select, arrow keys to navigate, q/ESC to quit.
+
+#Example#
+- Well, time to work on the crappy thesis: ``search cd draft``
+- Hmm, I need music: ``search "Canto Ostinato"``
+- What did Luke say in the email? Let's check it: ``search vim "emlx coolwanglu"``
+
+#Internal#
+Nothing hardcore. This is just a Python/curses wrapper around the built-in spotlight companion tool ``mdfind``. Thus, you could reach anything that spotlight does.
