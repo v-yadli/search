@@ -3,12 +3,11 @@
 import sys
 import curses
 import os
+import locale
 args = sys.argv
+locale.setlocale(locale.LC_ALL,'')
 # TODO implement the limit
-MAX_ENTRY_COUNT = 100
-
-#for i in xrange(0, len(args)):
-#				print args[i]
+MAX_ENTRY_COUNT = 512
 
 def usage():
 				print 'usage: search [command] file\r'
@@ -54,8 +53,6 @@ def select(results):
 												horizontal_offset = horizontal_offset - 1
 												if horizontal_offset < 0:
 																horizontal_offset = 0
-												#screen.redrawwin()
-												#screen.refresh()
 								if key == curses.KEY_RIGHT:
 												horizontal_offset = horizontal_offset + 1
 												if horizontal_offset >= maxLen:
@@ -64,8 +61,6 @@ def select(results):
 												line += h
 								if key == curses.KEY_PPAGE:
 												line -= h
-												#screen.redrawwin()
-												#screen.refresh()
 								if key == ord('\n') or key == curses.KEY_ENTER:
 												break
 								if key == 27 or key==ord('q'): #27 for ESC
@@ -78,10 +73,8 @@ def select(results):
 												line = count - 1
 								if line < top:
 												top = line
-												#draw_page(results, top, line, h, w, count, screen)
 								if line - top >= h:
 												top = line - h + 1
-												#draw_page(results, top, line, h, w, count, screen)
 								
 				curses.endwin()
 				curses.echo()
@@ -104,19 +97,10 @@ def search(tmp, target, cmd):
 				if cmd == '':
 								cmd = 'open'
 
-				#if cmd == 'cd' or cmd.startswith("cd "):
-								#In this case, even 'import antigravity' won't help.
-								#print "Sorry boss, can't do that right now."
-								#os.exit(-1)
-
 				cmd_string = cmd+' "'+ret[choice].strip() + '"'
 				cmd_file = open(tmp, "w")
 				cmd_file.write(cmd_string)
 				cmd_file.close()
-				#print cmd_string
-				#os.system(cmd_string)
-
-#print len(args)
 
 if len(args)<3:
 				usage()
