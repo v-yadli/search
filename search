@@ -5,9 +5,9 @@ import curses
 import os
 import locale
 args = sys.argv
-locale.setlocale(locale.LC_ALL,'')
+locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
 # TODO implement the limit
-MAX_ENTRY_COUNT = 512
+MAX_ENTRY_COUNT = 4096
 
 def usage():
 				print 'usage: search [command] file\r'
@@ -83,7 +83,11 @@ def select(results):
 				return line
 
 def search(tmp, target, cmd):
-				ret = os.popen('mdfind '+target).readlines()
+				ret = []
+				for entry in os.popen('mdfind '+target).readlines():
+								ret.append(entry)
+								if(len(ret)>=MAX_ENTRY_COUNT):
+												break
 				if cmd == 'cd' or cmd.startswith("cd "):
 								#pick directories only
 								ret = [entry for entry in ret if os.path.isdir(entry.strip())]
