@@ -1,5 +1,6 @@
 all: install
-install: install.sh
-	./install.sh
-clean:
-	rm -rf ~/.search
+install: installer.sh
+	./installer.sh install
+clean: installer.sh
+	./installer.sh uninstall
+

@@ -83,11 +83,9 @@ def select(results):
 				return line
 
 def search(tmp, target, cmd):
-				ret = []
-				for entry in os.popen('mdfind '+target).readlines():
-								ret.append(entry)
-								if(len(ret)>=MAX_ENTRY_COUNT):
-												break
+				pipe = os.popen('mdfind '+target+' | head -n '+str(MAX_ENTRY_COUNT))
+				ret = pipe.readlines()
+				
 				if cmd == 'cd' or cmd.startswith("cd "):
 								#pick directories only
 								ret = [entry for entry in ret if os.path.isdir(entry.strip())]

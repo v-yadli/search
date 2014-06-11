@@ -1,3 +1,4 @@
+### wrapper for search utility
 function search()
 {
 				if [ -f ~/.search/search ] 
@@ -15,4 +16,4 @@ function search()
 								echo 'Cannot find search script in ~/.search... Maybe the installation is broken?'
 				fi
 }
-
+### function search()
