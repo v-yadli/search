@@ -23,5 +23,8 @@ Nothing hardcore. This is just a Python/curses wrapper around the built-in spotl
 
 #Installation#
 - Clone it.
-- make install.
+- make, or make install.
 - Currently, bash and zsh are supported.
+
+#Uninstallation#
+- make clean
