@@ -28,3 +28,8 @@ Nothing hardcore. This is just a Python/curses wrapper around the built-in spotl
 
 #Uninstallation#
 - make clean
+
+#TODO#
+- More backends, like Tracker for GNOME or Everything SDK for Windows.
+- Display not just file names. Write drivers for different file extensions.
+- Rank subsystem.
