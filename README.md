@@ -1,7 +1,7 @@
 search
 ======
 
-Command line search tool built for OS X.
+Command line search tool, currently for OS X.
 
 ![image](https://github.com/v-yadli/search/raw/master/screenshots/1.png)
 ![image](https://github.com/v-yadli/search/raw/master/screenshots/2.png)
