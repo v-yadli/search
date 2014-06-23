@@ -12,6 +12,7 @@ Command line search tool for \*NIX.
 usage: search [command] file
 - If command is not specified, the default program will be called.
 - In the file list, press enter to select, arrow keys to navigate, page up/down to scroll whole pages, q/ESC to quit.
+- Basic vim key bindings included.
 
 #Example#
 - Well, time to work on the crappy thesis: ``search cd draft``
