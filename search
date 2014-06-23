@@ -43,37 +43,37 @@ def select(results): #{{{
         pad.addstr(line, 0, results[line], curses.A_REVERSE)
         pad.refresh(top, horizontal_offset, 0,0,h-1, w-1)
         key = screen.getch()
-   	    pad.addstr(line, 0, results[line], curses.A_NORMAL)
-   	    pad.refresh(top,horizontal_offset,0,0,h-1, w-1)
-   	    if key == curses.KEY_UP:
-   	   	    line = line - 1
-   	    if key == curses.KEY_DOWN:
-   	   	    line = line + 1
-   	    if key == curses.KEY_LEFT:
-   	   	    horizontal_offset = horizontal_offset - 1
-   	        if horizontal_offset < 0:
-   	            horizontal_offset = 0
-   	    if key == curses.KEY_RIGHT:
-   	        horizontal_offset = horizontal_offset + 1
-   	        if horizontal_offset >= maxLen:
-   	            horizontal_offset = maxLen - 1
-   	    if key == curses.KEY_NPAGE:
-   	        line += h
-   	    if key == curses.KEY_PPAGE:
-   	        line -= h
-   	    if key == ord('\n') or key == curses.KEY_ENTER:
-   	        break
-   	    if key == 27 or key==ord('q'): #27 for ESC
-   	   	    screen.clear()
-   	        line = -1
-   	        break
-   	    if line < 0:
-   	        line = 0
-   	    if line >= count:
-   	        line = count - 1
-   	    if line < top:
-   	        top = line
-   	    if line - top >= h:
+        pad.addstr(line, 0, results[line], curses.A_NORMAL)
+        pad.refresh(top,horizontal_offset,0,0,h-1, w-1)
+        if key == curses.KEY_UP:
+            line = line - 1
+        if key == curses.KEY_DOWN:
+            line = line + 1
+        if key == curses.KEY_LEFT:
+            horizontal_offset = horizontal_offset - 1
+            if horizontal_offset < 0:
+                horizontal_offset = 0
+        if key == curses.KEY_RIGHT:
+           horizontal_offset = horizontal_offset + 1
+           if horizontal_offset >= maxLen:
+               horizontal_offset = maxLen - 1
+        if key == curses.KEY_NPAGE:
+            line += h
+        if key == curses.KEY_PPAGE:
+            line -= h
+        if key == ord('\n') or key == curses.KEY_ENTER:
+            break
+        if key == 27 or key==ord('q'): #27 for ESC
+            screen.clear()
+            line = -1
+            break
+        if line < 0:
+            line = 0
+        if line >= count:
+            line = count - 1
+        if line < top:
+            top = line
+        if line - top >= h:
             top = line - h + 1
 
     curses.endwin()
