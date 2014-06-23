@@ -91,7 +91,7 @@ def invoke_search_backend(target):#{{{
 
     if os.system("command -v tracker-search > /dev/null") == 0:
         pipe = os.popen('tracker-search --limit='+str(MAX_ENTRY_COUNT)+' '+target)
-        return [fstr[8:] for fstr in pipe.readlines() if fstr.startswith("file:///")]
+        return [fstr.strip()[7:] for fstr in pipe.readlines() if fstr.strip().startswith("file://")]
 
     return "no backend"
 
