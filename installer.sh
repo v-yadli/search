@@ -1,10 +1,14 @@
 #!/bin/bash
 
 source_command='source ~/.search/search_wrapper.sh'
+command -v bash > /dev/null
+has_bash=$?
+command -v zsh > /dev/null
+has_zsh=$?
 
 function install()
 {
-				if [ ! -d ~/.search ] 
+				if [ ! -d ~/.search ]
 				then
 								mkdir ~/.search
 				fi
@@ -12,7 +16,7 @@ function install()
 				cp ./search ~/.search/
 				cp ./search_wrapper.sh ~/.search/
 				
-				if [ -f ~/.zshrc ]
+				if [ $has_zsh -eq 0 ]
 				then
 								#could anyone tell me what's wrong if I make this string as a $variable? How to escape it?
 								fgrep "$source_command" ~/.zshrc > /dev/null
@@ -22,7 +26,7 @@ function install()
 								fi
 				fi
 
-				if [ -f ~/.bashrc ] || [ -f ~/.bash_profile ]
+				if [ $has_bash -eq 0 ]
 				then
 								#in both cases, we install to .bashrc
 								fgrep "$source_command" ~/.bashrc > /dev/null 2>&1

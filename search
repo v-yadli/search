@@ -6,110 +6,131 @@ import os
 import locale
 args = sys.argv
 locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
-# TODO implement the limit
 MAX_ENTRY_COUNT = 4096
 
-def usage():
-				print 'usage: search [command] file\r'
-				print '    - If command is not specified, the default program will be called.\r'
-				print '    - In the file list, press enter to select, UP/DOWN to navigate, q/ESC to quit.\r'
+def usage():#{{{
+    print 'usage: search [command] file\r'
+    print '    - If command is not specified, the default program will be called.\r'
+    print '    - In the file list, press enter to select, UP/DOWN to navigate, q/ESC to quit.\r'
+#}}}
 
-def select(results):
-				count = len(results)
-				maxLen = 1
-				for entry in results:
-								if len(entry) > maxLen:
-												maxLen = len(entry)
+def select(results): #{{{
+    count = len(results)
+    maxLen = 1
+    for entry in results:
+        if len(entry) > maxLen:
+            maxLen = len(entry)
 
-				screen = curses.initscr()
-				pad = curses.newpad(count+1, maxLen+1)
-				curses.noecho()
-				curses.curs_set(0)
-				screen.keypad(1)
+    screen = curses.initscr()
+    pad = curses.newpad(count+1, maxLen+1)
+    curses.noecho()
+    curses.curs_set(0)
+    screen.keypad(1)
 
-				for i in xrange(0, count):
-								pad.addstr(i,0, results[i])
+    for i in xrange(0, count):
+        pad.addstr(i,0, results[i])
 
-				h,w = screen.getmaxyx()
-				top = 0
-				line = 0
-				horizontal_offset = 0
+    h,w = screen.getmaxyx()
+    top = 0
+    line = 0
+    horizontal_offset = 0
 
-				#Needed to somehow 'activate' the screen. Otherwise won't update after the first pad.refresh
-				screen.redrawwin()
-				screen.refresh()
+    #Needed to somehow 'activate' the screen. Otherwise won't update after the first pad.refresh
+    screen.redrawwin()
+    screen.refresh()
 
-				while True:
-								pad.addstr(line, 0, results[line], curses.A_REVERSE)
-								pad.refresh(top, horizontal_offset, 0,0,h-1, w-1)
-								key = screen.getch()
-								pad.addstr(line, 0, results[line], curses.A_NORMAL)
-								pad.refresh(top,horizontal_offset,0,0,h-1, w-1)
-								if key == curses.KEY_UP:
-												line = line - 1
-								if key == curses.KEY_DOWN:
-												line = line + 1
-								if key == curses.KEY_LEFT:
-												horizontal_offset = horizontal_offset - 1
-												if horizontal_offset < 0:
-																horizontal_offset = 0
-								if key == curses.KEY_RIGHT:
-												horizontal_offset = horizontal_offset + 1
-												if horizontal_offset >= maxLen:
-																horizontal_offset = maxLen - 1
-								if key == curses.KEY_NPAGE:
-												line += h
-								if key == curses.KEY_PPAGE:
-												line -= h
-								if key == ord('\n') or key == curses.KEY_ENTER:
-												break
-								if key == 27 or key==ord('q'): #27 for ESC
-												screen.clear()
-												line = -1
-												break
-								if line < 0:
-												line = 0
-								if line >= count:
-												line = count - 1
-								if line < top:
-												top = line
-								if line - top >= h:
-												top = line - h + 1
-								
-				curses.endwin()
-				curses.echo()
-				curses.curs_set(1)
+    while True:
+        pad.addstr(line, 0, results[line], curses.A_REVERSE)
+        pad.refresh(top, horizontal_offset, 0,0,h-1, w-1)
+   	    key = screen.getch()
+   	    pad.addstr(line, 0, results[line], curses.A_NORMAL)
+   	    pad.refresh(top,horizontal_offset,0,0,h-1, w-1)
+   	    if key == curses.KEY_UP:
+   	   	    line = line - 1
+   	    if key == curses.KEY_DOWN:
+   	   	    line = line + 1
+   	    if key == curses.KEY_LEFT:
+   	   	    horizontal_offset = horizontal_offset - 1
+   	        if horizontal_offset < 0:
+   	            horizontal_offset = 0
+   	    if key == curses.KEY_RIGHT:
+   	        horizontal_offset = horizontal_offset + 1
+   	        if horizontal_offset >= maxLen:
+   	            horizontal_offset = maxLen - 1
+   	    if key == curses.KEY_NPAGE:
+   	        line += h
+   	    if key == curses.KEY_PPAGE:
+   	        line -= h
+   	    if key == ord('\n') or key == curses.KEY_ENTER:
+   	        break
+   	    if key == 27 or key==ord('q'): #27 for ESC
+   	   	    screen.clear()
+   	        line = -1
+   	        break
+   	    if line < 0:
+   	        line = 0
+   	    if line >= count:
+   	        line = count - 1
+   	    if line < top:
+   	        top = line
+   	    if line - top >= h:
+            top = line - h + 1
 
-				return line
+    curses.endwin()
+    curses.echo()
+    curses.curs_set(1)
 
-def search(tmp, target, cmd):
-				pipe = os.popen('mdfind '+target+' | head -n '+str(MAX_ENTRY_COUNT))
-				ret = pipe.readlines()
-				
-				if cmd == 'cd' or cmd.startswith("cd "):
-								#pick directories only
-								ret = [entry for entry in ret if os.path.isdir(entry.strip())]
-				if len(ret)==0:
-								print 'Nothing found.'
-								sys.exit(-1)
-				choice = select(ret)
-				if choice == -1:
-								return
+    return line
+#}}}
 
-				if cmd == '':
-								cmd = 'open'
+def invoke_search_backend(target):#{{{
+    
+    if os.system("command -v mdfind > /dev/null") == 0:
+        pipe = os.popen('mdfind '+target+' | head -n '+str(MAX_ENTRY_COUNT))
+        return pipe.readlines()
 
-				cmd_string = cmd+' "'+ret[choice].strip() + '"'
-				cmd_file = open(tmp, "w")
-				cmd_file.write(cmd_string)
-				cmd_file.close()
+    if os.system("command -v tracker-search > /dev/null") == 0:
+        pipe = os.popen('tracker-search --limit='+str(MAX_ENTRY_COUNT)+' '+target)
+        return [fstr[8:] for fstr in pipe.readlines() if fstr.startswith("file:///")]
+
+    return "no backend"
+
+#}}}
+
+def search(tmp, target, cmd):#{{{
+    ret = invoke_search_backend(target)
+
+    if ret == "no backend":
+        print 'No compatible backend is found.'
+        return
+
+    if cmd == 'cd' or cmd.startswith("cd "):
+        #pick directories only
+        ret = [entry for entry in ret if os.path.isdir(entry.strip())]
+    if len(ret)==0:
+        print 'Nothing found.'
+        sys.exit(-1)
+    choice = select(ret)
+    if choice == -1:
+        return
+
+    if cmd == '':
+        cmd = 'open'
+
+    cmd_string = cmd+' "'+ret[choice].strip() + '"'
+    cmd_file = open(tmp, "w")
+    cmd_file.write(cmd_string)
+    cmd_file.close()
+#}}}
+
+# main
 
 if len(args)<3:
-				usage()
-				sys.exit(-1)
+    usage()
+    sys.exit(-1)
 else:
-				args.pop(0)
-				tmp = args.pop(0)
-				target = args.pop()
-				cmd = ' '.join(args)
-				search(tmp, target, cmd)
+    args.pop(0)
+    tmp = args.pop(0)
+    target = args.pop()
+    cmd = ' '.join(args)
+    search(tmp, target, cmd)
