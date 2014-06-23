@@ -45,21 +45,23 @@ def select(results): #{{{
         key = screen.getch()
         pad.addstr(line, 0, results[line], curses.A_NORMAL)
         pad.refresh(top,horizontal_offset,0,0,h-1, w-1)
-        if key == curses.KEY_UP:
+
+
+        if key == curses.KEY_UP or key == ord('k'):
             line = line - 1
-        if key == curses.KEY_DOWN:
+        if key == curses.KEY_DOWN or key == ord('j'):
             line = line + 1
-        if key == curses.KEY_LEFT:
+        if key == curses.KEY_LEFT or key == ord('h'):
             horizontal_offset = horizontal_offset - 1
             if horizontal_offset < 0:
                 horizontal_offset = 0
-        if key == curses.KEY_RIGHT:
+        if key == curses.KEY_RIGHT or key == ord('l'):
            horizontal_offset = horizontal_offset + 1
            if horizontal_offset >= maxLen:
                horizontal_offset = maxLen - 1
-        if key == curses.KEY_NPAGE:
+        if key == curses.KEY_NPAGE or key == 6:#6 for ^F
             line += h
-        if key == curses.KEY_PPAGE:
+        if key == curses.KEY_PPAGE or key == 2:#2 for ^B
             line -= h
         if key == ord('\n') or key == curses.KEY_ENTER:
             break
