@@ -19,7 +19,11 @@ usage: search [command] file
 - What did Luke say in the email? Let's check it: ``search vim "emlx coolwanglu"``
 
 #Internal#
-Nothing hardcore. This is just a Python/curses wrapper around the built-in spotlight companion tool ``mdfind``. Thus, you could reach anything that spotlight does.
+Nothing hardcore. This is just a Python/curses wrapper around command line backends. Thus, you could reach anything that spotlight does.
+
+##Supported backends##
+- ``mdfind`` (Mac OS X only)
+- ``Tracker``
 
 #Installation#
 - Clone it.
