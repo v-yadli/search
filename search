@@ -42,7 +42,7 @@ def select(results): #{{{
     while True:
         pad.addstr(line, 0, results[line], curses.A_REVERSE)
         pad.refresh(top, horizontal_offset, 0,0,h-1, w-1)
-   	    key = screen.getch()
+        key = screen.getch()
    	    pad.addstr(line, 0, results[line], curses.A_NORMAL)
    	    pad.refresh(top,horizontal_offset,0,0,h-1, w-1)
    	    if key == curses.KEY_UP:
