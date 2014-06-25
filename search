@@ -4,6 +4,7 @@ import sys
 import curses
 import os
 import locale
+import platform
 args = sys.argv
 locale.setlocale(locale.LC_ALL,'en_US.UTF-8')
 MAX_ENTRY_COUNT = 4096
@@ -117,7 +118,10 @@ def search(tmp, target, cmd):#{{{
         return
 
     if cmd == '':
-        cmd = 'open'
+        if platform.system() == 'Darwin':
+            cmd = 'open'
+        else
+            cmd = 'xdg-open'
 
     cmd_string = cmd+' "'+ret[choice].strip() + '"'
     cmd_file = open(tmp, "w")
