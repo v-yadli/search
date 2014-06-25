@@ -11,7 +11,7 @@ fi
 
 function search()
 {
-  param_len=$(($#-1))
+  param_len=$(($# - 1))
   cmd_array=${@:1:$param_len}
   pattern=${@: -1}
   if [ -f ~/.search/search ] 

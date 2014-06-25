@@ -88,11 +88,11 @@ def select(results): #{{{
 def invoke_search_backend(target):#{{{
     
     if os.system("command -v mdfind > /dev/null") == 0:
-        pipe = os.popen('mdfind '+target+' | head -n '+str(MAX_ENTRY_COUNT))
+        pipe = os.popen('mdfind "'+target+'" | head -n '+str(MAX_ENTRY_COUNT))
         return pipe.readlines()
 
     if os.system("command -v tracker-search > /dev/null") == 0:
-        pipe = os.popen('tracker-search --limit='+str(MAX_ENTRY_COUNT)+' '+target)
+        pipe = os.popen('tracker-search --limit='+str(MAX_ENTRY_COUNT)+' "'+target+'"')
         return [fstr.strip()[7:] for fstr in pipe.readlines() if fstr.strip().startswith("file://")]
 
     return "no backend"
