@@ -1,10 +1,10 @@
 ### wrapper for search utility
 
-if [ "$ZSH_NAME" == "zsh" ]
+if [ -n "$ZSH_NAME" ]
 then
   bindkey -s '^@' '^asearch \n'
 fi
-if [ "`basename $(echo $BASH)`" == "bash" ]
+if [ -n "$BASH" ]
 then
   bind '"\C-@":"\C-Asearch \n'
 fi
