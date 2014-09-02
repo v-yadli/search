@@ -120,7 +120,7 @@ def search(tmp, target, cmd):#{{{
     if cmd == '':
         if platform.system() == 'Darwin':
             cmd = 'open'
-        else
+        else:
             cmd = 'xdg-open'
 
     cmd_string = cmd+' "'+ret[choice].strip() + '"'
